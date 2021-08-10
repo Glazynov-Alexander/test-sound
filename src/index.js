@@ -4,9 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-let play = (value, time) => {
-  let context = new (window.AudioContext || window.webkitAudioContext)();
-  let oscillator = context.createOscillator();
+let context = new (window.AudioContext || window.webkitAudioContext)();
+let oscillator = context.createOscillator();
+let up = false;
+let canvas = document.getElementById("animate");
+
+const play = (value) => {
+  context = new (window.AudioContext || window.webkitAudioContext)();
+  oscillator = context.createOscillator();
   let gain = context.createGain();
 
   oscillator.connect(gain);
@@ -14,18 +19,13 @@ let play = (value, time) => {
   oscillator.type = "square";
 
   oscillator.frequency.value = value;
-  gain.gain.setValueAtTime(0.01, context.currentTime);
+  gain.gain.setValueAtTime(1, context.currentTime);
   oscillator.start(context.currentTime);
-
-  gain.gain.exponentialRampToValueAtTime(0.001, time + 2);
-  oscillator.stop(time + 0.05);
 };
 
-let up = false;
-
 const animations = (x, y, radius, color, value) => {
-  let context = new (window.AudioContext || window.webkitAudioContext)();
-  let canvas = document.getElementById("animate");
+  up = true;
+  canvas = document.getElementById("animate");
   let ctx = canvas.getContext("2d");
 
   const draw = () => {
@@ -39,31 +39,36 @@ const animations = (x, y, radius, color, value) => {
   };
 
   draw();
-  play(value, context.currentTime);
-    up = false;
+  play(value);
+};
 
-    // setTimeout(() => {
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // }, 100);
+const stop = () => {
+  let can = canvas?.getContext("2d");
+  oscillator.stop(context.currentTime);
+  can.clearRect(0, 0, 1620, 1008);
+  up = false;
 };
 
 window.document.addEventListener("keydown", (event) => {
   if (event.code === "KeyE" && !up) {
-    up = true;
-    animations(600, 600, 200, "red", 100);
+    animations(600, 600, 200, "#f78047", 100);
   }
   if (event.code === "KeyF" && !up) {
-    up = true;
-    animations(600, 600, 300, "blue", 150);
+    animations(600, 600, 100, "#70dce191", 300);
   }
   if (event.code === "KeyW" && !up) {
-    up = true;
-    animations(600, 600, 300, "green", 150);
+    animations(600, 600, 300, "#83ef81", 200);
   }
   if (event.code === "KeyG" && !up) {
-    up = true;
-    animations(600, 600, 300, "yellow", 150);
+    animations(600, 600, 400, "#efdf1c", 150);
   }
+});
+
+window.document.addEventListener("keyup", (event) => {
+    const keys = [ "KeyW", "KeyE", "KeyF", "KeyG" ];
+    if(keys.includes(event.code) || up) {
+        stop();
+    }
 });
 
 ReactDOM.render(
