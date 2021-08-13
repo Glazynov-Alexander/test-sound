@@ -1,22 +1,31 @@
 import "./App.css";
 
-function App({ keys, play, stop, values }) {
-  const notes = ["c", "d", "e", "f", "g", "a", "h"];
-
+function App({ keys, play, stop, values, keysBlack }) {
   return (
     <div className={"App"}>
-      <h2>work key [S, D, F, G, H, J, K]</h2>
-      <div className={"piano"}>
-        {notes.map((note, ind) => {
-          const key = keys[ind];
+      <h2>work key [S, D, F, G, H, J, K, E, R, Y, U, I]</h2>
+      <div className={"black"}>
+        {keysBlack.map((note, ind) => {
           return (
             <div
-              id={key}
-              onMouseDown={(e) => play(values[key], key, key)}
-              onMouseUp={() => stop(key, 0, key)}
+              id={note}
+              onMouseDown={() => play(values[note], note, note)}
+              onMouseUp={() => stop(note, 0, note)}
               key={note}
             >
-              {note}
+            </div>
+          );
+        })}
+      </div>
+      <div className={"piano"}>
+        {keys.map((note, ind) => {
+          return (
+            <div
+              id={note}
+              onMouseDown={(e) => play(values[note], note, note)}
+              onMouseUp={() => stop(note, 0, note)}
+              key={note}
+            >
             </div>
           );
         })}

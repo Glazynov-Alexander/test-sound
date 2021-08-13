@@ -38,3 +38,32 @@ body {
 .down {
     background: #939191 !important;
 }
+
+.black {
+    display: flex;
+    position: relative;
+}
+
+.black div {
+    position: absolute;
+    width: 100px;
+    height: 300px;
+    background: rgb(23, 22, 22);
+    margin: 10px;
+    top: -10px;
+}
+.black div:nth-child(1) {
+    right: 320px;
+}
+.black div:nth-child(2) {
+    right: 165px;
+}
+.black div:nth-child(3) {
+    left: 15px;
+}
+.black div:nth-child(4) {
+    left: 165px;
+}
+.black div:nth-child(5) {
+    left: 315px;
+}
