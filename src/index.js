@@ -4,76 +4,94 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-let context = new (window.AudioContext || window.webkitAudioContext)();
-let oscillator = context.createOscillator();
-let up = false;
-let canvas = document.getElementById("animate");
+let context = new window.AudioContext();
+const keys = ["KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK"];
+const map = new Map();
+let ids = [];
+const mapPlay = new Map();
 
-const play = (value) => {
-  context = new (window.AudioContext || window.webkitAudioContext)();
-  oscillator = context.createOscillator();
-  let gain = context.createGain();
+const play = (value, event, id) => {
+    document.getElementById(event).className = "down";
+    if(id) ids.push(id);
 
-  oscillator.connect(gain);
-  gain.connect(context.destination);
-  oscillator.type = "square";
+    map.set(event, true);
+    let oscillator = context.createOscillator();
+    let gain = context.createGain();
 
-  oscillator.frequency.value = value;
-  gain.gain.setValueAtTime(1, context.currentTime);
-  oscillator.start(context.currentTime);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.type = "sine";
+
+    oscillator.frequency.value = value;
+    gain.gain.setValueAtTime(0.1, 0);
+    gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 3);
+
+    oscillator.start(context.currentTime);
+    mapPlay.set(event, {
+        oscillator: oscillator,
+        context: context.currentTime,
+    });
 };
 
-const animations = (x, y, radius, color, value) => {
-  up = true;
-  canvas = document.getElementById("animate");
-  let ctx = canvas.getContext("2d");
+const stop = (event, time, id) => {
+    if(id && ids.length && !mapPlay.get(event)) {
+        event = ids[0]
+        ids = []
+    }
 
-  const draw = () => {
-    ctx.beginPath();
-    ctx.lineWidth = 6;
-    ctx.arc(x, y, radius, 0, Math.PI * 2, true);
-    ctx.lineTo(x, y);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-  };
-
-  draw();
-  play(value);
+    let { oscillator, context } = mapPlay.get(event);
+    oscillator.stop(context + time);
+    ids = []
+    setTimeout(() => {
+        document.getElementById(event).className = "";
+    }, time * 1000);
+    map.set(event, "");
+    mapPlay.set(event, "");
 };
 
-const stop = () => {
-  let can = canvas?.getContext("2d");
-  oscillator.stop(context.currentTime);
-  can.clearRect(0, 0, 1620, 1008);
-  up = false;
+const values = {
+    KeyS: 130.81,
+    KeyD: 146.83,
+    KeyF: 164.81,
+    KeyG: 174.61,
+    KeyH: 196.0,
+    KeyJ: 220.0,
+    KeyK: 246.94,
 };
 
 window.document.addEventListener("keydown", (event) => {
-  if (event.code === "KeyE" && !up) {
-    animations(600, 600, 200, "#f78047", 100);
-  }
-  if (event.code === "KeyF" && !up) {
-    animations(600, 600, 100, "#70dce191", 300);
-  }
-  if (event.code === "KeyW" && !up) {
-    animations(600, 600, 300, "#83ef81", 200);
-  }
-  if (event.code === "KeyG" && !up) {
-    animations(600, 600, 400, "#efdf1c", 150);
-  }
+    if (!map.get(event.code) && event.code === "KeyS") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyD") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyF") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyG") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyH") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyJ") {
+        play(values[event.code], event.code);
+    }
+    if (!map.get(event.code) && event.code === "KeyK") {
+        play(values[event.code], event.code);
+    }
 });
 
 window.document.addEventListener("keyup", (event) => {
-    const keys = [ "KeyW", "KeyE", "KeyF", "KeyG" ];
-    if(keys.includes(event.code) || up) {
-        stop();
+    if (keys.includes(event.code) && mapPlay.get(event.code)) {
+        stop(event.code, 0.1);
     }
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App keys={keys} values={values} stop={stop} play={play} />
   </React.StrictMode>,
   document.getElementById("root")
 );

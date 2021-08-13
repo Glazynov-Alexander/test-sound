@@ -3,4 +3,38 @@ body {
     height: 100vh;
 }
 
+.App {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 
+.piano {
+    display: flex;
+}
+
+.piano div {
+    height: 500px;
+    width: 150px;
+    border: 1px solid rgba(180, 179, 179, 0.61);
+    text-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding-top: 20px;
+    background: #f4f6f8;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.piano div:hover {
+    background: rgba(240, 248, 255, 0.74);
+}
+
+.down {
+    background: #939191 !important;
+}
