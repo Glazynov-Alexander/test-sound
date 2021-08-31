@@ -3,11 +3,15 @@ body {
     height: 100vh;
 }
 
-.App {
+.main {
     text-align: center;
     align-items: center;
     display: flex;
     flex-direction: column;
+}
+
+.main:focus {
+    outline: none;
 }
 
 .piano {
@@ -42,6 +46,11 @@ body {
 .black {
     display: flex;
     position: relative;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .black div {
