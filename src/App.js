@@ -1,9 +1,14 @@
 import "./App.css";
 import { map, mapPlay, play, stop } from "./utils";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function App({ keysWhite, values, keysBlack }) {
   const [elem, setELem] = useState(null);
+  const press = useRef();
+
+  useEffect(() => {
+    press.current.focus();
+  }, []);
 
   const clickPlay = useCallback(
     (note, element) => {
@@ -51,6 +56,7 @@ function App({ keysWhite, values, keysBlack }) {
 
   return (
     <div
+      ref={press}
       tabIndex="0"
       onKeyUp={(e) => onStopUp(e.code, e)}
       onKeyDown={(e) => onPlayDown(e.code, e)}
